@@ -9,6 +9,7 @@ const map = new mapboxgl.Map({
   center: [29.736, -1.975], // starting position [lng, lat]
   zoom: 7.5, // starting zoom
   pitch: 0,
+  minZoom: 7.5,
   // hash: true,
 });
 
@@ -86,16 +87,13 @@ map.on("load", () => {
     while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
       coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
     }
-    console.log();
-    let name = "Name: " + e.features[0].properties["Bridge Name"];
-    // let village = "Village: " + properties["Bridge Opportunity: Level 4 Government"];
-    // let days = "Days Flooded: " + properties["Days per year river is flooded"];
-    // let width = "River Width: " + properties["Width of River During Flooding (m)"] + "m";
-    // let mortality = "Deaths: " + properties["River crossing deaths in last 3 years"];
-    // let blocking = "Blocking: " + blockingString;
-    // let rejected = "Rejected: " + properties["Flag for Rejection"];
-
-    let popupList = [name];
+    console.log(e.features[0].properties);
+    let region = "Region: " + e.features[0].properties["Level 2 Government"];
+    let name = "Bridge name: " + e.features[0].properties["Bridge Name"];
+    let year = "Year Built: " + e.features[0].properties["B2P Fiscal Year"];
+    let pop = "Population served: " + e.features[0].properties["Individuals Directly Served"];
+    let popClose = "Population within 2km: " + e.features[0].properties["Population Estimate 2000m"];
+    let popupList = [region, name, year, pop, popClose];
 
     new mapboxgl.Popup()
       .setLngLat(coordinates)
