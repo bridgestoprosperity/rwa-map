@@ -76,7 +76,9 @@ map.on("load", () => {
   });
 
   // whenthe all-sites layer is clicked show a mapbox popup
+  let year = null;
   map.on("click", "all-sites", (e) => {
+    let popupList = []
     // Copy coordinates array.
     const coordinates = e.features[0].geometry.coordinates.slice();
     // const description = e.features[0].properties.description;
@@ -89,11 +91,25 @@ map.on("load", () => {
     }
     console.log(e.features[0].properties);
     let region = "Region: " + e.features[0].properties["Level 2 Government"];
-    let name = "Bridge name: " + e.features[0].properties["Bridge Name"];
-    let year = "Year Built: " + e.features[0].properties["B2P Fiscal Year"];
-    let pop = "Population served: " + e.features[0].properties["Individuals Directly Served"];
-    let popClose = "Population within 2km: " + e.features[0].properties["Population Estimate 2000m"];
-    let popupList = [region, name, year, pop, popClose];
+    // add region to list
+    popupList.push(region);
+
+
+    let name = "Bridge Name: " + e.features[0].properties["Bridge Name"];
+    popupList.push(name);
+    let stage = "Stage: " + e.features[0].properties["Stage"];
+    popupList.push(stage);
+    console.log(e.features[0].properties["Stage"])
+    if (e.features[0].properties["Stage"] == "Complete") {
+      year = "Year Built: " + e.features[0].properties["B2P Fiscal Year"];
+      popupList.push(year);
+    } else {
+      year = null;
+    }
+    let pop = "Population Served: " + e.features[0].properties["Individuals Directly Served"];
+    popupList.push(pop);
+    let popClose = "Population Within 2km: " + e.features[0].properties["Population Estimate 2000m"];
+    popupList.push(popClose);
 
     new mapboxgl.Popup()
       .setLngLat(coordinates)
